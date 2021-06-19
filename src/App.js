@@ -1,9 +1,33 @@
-import "./App.css";
-import "./logo192.png";
+import { useState, useEffect } from "react";
+import { supabase } from "./supabaseClient";
+import Auth from "./Auth";
+import Account from "./Account";
 
-function App() {
+export default function App() {
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    setSession(supabase.auth.session());
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   return (
-    <div className="p-8 bg-purple-500 bg-clip-padding">
+    <div className=" w-1/2 mx-auto md:w-5/6 container h-screen  bg-purple-400 flex flex-col">
+      {!session ? (
+        <Auth />
+      ) : (
+        <Account key={session.user.id} session={session} />
+      )}
+    </div>
+  );
+}
+
+function aaa() {
+  return (
+    <div className="p-8  bg-purple-500">
       <div className="p-8 rounded-md bg-purple-100  ">
         <div className="p-8 mx-auto flex items-center space-x-4 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
           <div className="py-8 px-8 bg-gray-50 max-w-sm mx-auto bg-white rounded-xl shadow-md space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
@@ -30,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+// export default App;
