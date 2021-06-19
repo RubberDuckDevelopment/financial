@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient";
+import googleSignin from "./imgs/btn_google_signin_light_normal_web.png";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export default function Auth() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signIn({
+      const { error } = await supabase.auth.signIn({
         provider: "google",
       });
       if (error) throw error;
@@ -59,16 +60,17 @@ export default function Auth() {
       >
         {loading ? <span>Loading</span> : <span>Send magic link</span>}
       </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          handleGoogleLogin();
-        }}
-        className="px-6 py-2 text-sm text-purple-600 bg-gray-100 font-semibold rounded-full border border-purple-200 hover:text-gray-50 hover:bg-purple-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
-        disabled={loading}
-      >
-        {loading ? <span>Loading</span> : <span>Log In with Google</span>}
-      </button>
+      <button className="mt-2 flex border border-purple-200 hover:text-gray-50 hover:bg-purple-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <img
+          onClick={(e) => {
+            e.preventDefault();
+            handleGoogleLogin();
+          }}
+          disabled={loading}
+          src={googleSignin}
+          alt="Google login"
+        ></img>
+      </button>{" "}
     </div>
   );
 }
