@@ -18,6 +18,20 @@ export default function Auth() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      const { user, session, error } = await supabase.auth.signIn({
+        provider: "google",
+      });
+      if (error) throw error;
+    } catch (error) {
+      alert(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-144 p-8 rounded-md m-auto bg-purple-100   ">
       <h1 className="p-2 mb-4 bg-purple-900 text-purple-50 font-semibold">
@@ -40,10 +54,20 @@ export default function Auth() {
           e.preventDefault();
           handleLogin(email);
         }}
-        className="px-6 py-2 text-sm text-purple-600 bg-gray-50 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+        className="px-6 py-2 text-sm text-purple-600 bg-gray-50 font-semibold rounded-full border border-purple-200 hover:text-gray-50 hover:bg-purple-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
         disabled={loading}
       >
         {loading ? <span>Loading</span> : <span>Send magic link</span>}
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          handleGoogleLogin();
+        }}
+        className="px-6 py-2 text-sm text-purple-600 bg-gray-100 font-semibold rounded-full border border-purple-200 hover:text-gray-50 hover:bg-purple-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+        disabled={loading}
+      >
+        {loading ? <span>Loading</span> : <span>Log In with Google</span>}
       </button>
     </div>
   );
